@@ -1,5 +1,7 @@
 {
-	"deno.enable": false,
+	"deno.enablePaths": [
+		"./DevTools/"
+	],
 	"cSpell.words": [
 		"Analyers",
 		"andymckay",
@@ -15,6 +17,7 @@
 		"CODEOWNERS",
 		"communitytoolkit",
 		"deno",
+		"denoland",
 		"dodgerblue",
 		"editorconfig",
 		"ethomson",
@@ -57,6 +60,7 @@
 		"sixlabors",
 		"softprops",
 		"softwareantics",
+		"sonarscanner",
 		"struct",
 		"stylecop",
 		"Syed",
@@ -69,10 +73,39 @@
 		"Vorbis",
 		"xunit"
 	],
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/.idea": true,
+		"*.sln.DotSettings.user": true,
+		"**/bin": true,
+		"**/obj": true
+	},
+	"files.eol": "\n",
+	"window.title": "🦖Velaptor",
+	"workbench.colorCustomizations": {
+		"titleBar.activeBackground": "#5f4f41",
+		"titleBar.activeForeground": "#FFFFFF",
+	},
+	"workbench.editor.customLabels.patterns": {
+		"**/Testing/**/*.cs": "${filename}🧪",
+		"**/Velaptor/**/*.cs": "${filename}👾",
+		"**/DevTools/**/*.ts": "${filename}🔧",
+		"**/.github/workflows/**/*.yml": "${filename}⚙️",
+		"**/ReleaseNotes/**/*.md": "${filename}📋",
+	},
 	"dotnet.defaultSolution": "Velaptor.sln",
 	"[csharp]": {
 		"editor.insertSpaces": false,
 		"editor.indentSize": 4,
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "denoland.vscode-deno",
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4,
 	},
 	"[jsonc]": {
 		"editor.insertSpaces": false,
