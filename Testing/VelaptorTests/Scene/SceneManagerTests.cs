@@ -1,4 +1,4 @@
-﻿// <copyright file="SceneManagerTests.cs" company="KinsonDigital">
+// <copyright file="SceneManagerTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -709,6 +709,7 @@ public class SceneManagerTests
         // Act
         var act = () => sut.LoadContent();
 
+        act.ShouldNotThrow();
     }
 
     [Fact]
