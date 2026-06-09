@@ -10,9 +10,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Threading;
 using Carbonate;
 using Carbonate.OneWay;
 using Exceptions;
+using ExtensionMethods;
 using Factories;
 using Graphics;
 using Services;
@@ -35,7 +37,7 @@ internal sealed class AtlasLoader : IAtlasLoader
     private readonly IDirectory directory;
     private readonly IFile file;
     private readonly IPath path;
-    private bool isDisposed;
+    private int isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AtlasLoader"/> class.
@@ -44,8 +46,8 @@ internal sealed class AtlasLoader : IAtlasLoader
     /// <param name="atlasDataFactory">Generates <see cref="IAtlasData"/> instances.</param>
     /// <param name="reactableFactory">Creates reactables for sending and receiving notifications with or without data.</param>
     /// <param name="atlasDataPathResolver">Resolves paths to JSON atlas data files.</param>
-    /// <param name="imageService">Provides image related services.</param>
-    /// <param name="jsonService">Provides JSON related services.</param>
+    /// <param name="imageService">Provides image-related services.</param>
+    /// <param name="jsonService">Provides JSON-related services.</param>
     /// <param name="directory">Performs operations with directories.</param>
     /// <param name="file">Performs operations with files.</param>
     /// <param name="path">Processes directory and file paths.</param>
@@ -112,7 +114,7 @@ internal sealed class AtlasLoader : IAtlasLoader
 
     /// <inheritdoc cref="IAtlasLoader.Load"/>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="atlasPathOrName"/> is null or empty.</exception>
-    /// <exception cref="LoadAtlasException">Thrown if the .</exception>
+    /// <exception cref="LoadAtlasException">Thrown if the extension is invalid.</exception>
     /// <exception cref="LoadContentException">Thrown if an issue occurs with loading the atlas JSON data.</exception>
     /// <exception cref="FileNotFoundException">Thrown if the atlas data and/or image files are not found.</exception>
     /// <remarks>
@@ -132,6 +134,7 @@ internal sealed class AtlasLoader : IAtlasLoader
     public IAtlasData Load(string atlasPathOrName)
     {
         ArgumentException.ThrowIfNullOrEmpty(atlasPathOrName);
+        atlasPathOrName = atlasPathOrName.NormalizePath();
 
         var isPathRooted = this.path.IsPathRooted(atlasPathOrName);
         var contentDirPath = isPathRooted
@@ -210,7 +213,7 @@ internal sealed class AtlasLoader : IAtlasLoader
     /// </summary>
     private void ShutDown()
     {
-        if (this.isDisposed)
+        if (Interlocked.Exchange(ref this.isDisposed, 1) != 0)
         {
             return;
         }
@@ -223,6 +226,5 @@ internal sealed class AtlasLoader : IAtlasLoader
         }
 
         this.atlasCache.Clear();
-        this.isDisposed = true;
     }
 }
